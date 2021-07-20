@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img :src="backgroundImg" alt="">
+    <HelloWorld :image="map"/>
   </div>
 </template>
 
@@ -12,7 +12,13 @@ export default {
   name: 'App',
   components: {
     HelloWorld
-  }
+  },
+  data: function(){
+    return{
+      backgroundImg: require('/src/assets/pattern-bg.png'),
+      map: require('/src/assets/Maps.png')
+    }
+  },
 }
 </script>
 
