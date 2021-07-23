@@ -1,10 +1,9 @@
 <template>
   <div class="wrapper">
-    <h1>IP Address Tracker</h1>
     <form action="#">
       <label for="search"></label>
       <input type="text" id="search" name="search">
-      <input type="submit" value="Submit">
+      <input type="submit" value=">">
     </form>
 
     <ul class="info">
@@ -42,6 +41,45 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
+@import "../global.scss";
+
+  .wrapper{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    form{
+      position: absolute;
+      top: 10%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      input{
+        height: 2rem;
+        margin: 0;
+        padding: 0;
+        border-width: 0;
+      }
+      input[type="text"]{
+        width: 80%;
+        border-radius: $border 0 0 $border;
+      }
+      input[type="submit"]{
+        width: 10%;
+        background-color: $btn-color;
+        color: $primary-text-color;
+        border-radius:  0 $border $border 0;
+      }
+    }
+
+    .map{
+      img{
+      width: 100%;
+      height: auto;
+      }  
+  }
+
+}
+
 
 </style>

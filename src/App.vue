@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <img :src="backgroundImg" alt="">
+    <h1 class="title">IP Address Tracker</h1>
+    <img class="background-img" :src="backgroundImg" alt="">
     <HelloWorld :image="map"/>
   </div>
 </template>
@@ -22,13 +23,33 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import "./global.scss";
+
+html,
+body{
+  margin: 0;
+  padding: 0;
+
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  .title{
+    margin: 0 auto;
+    position: absolute;
+    color: $primary-text-color;
+  }
+  .background-img{
+    width: 100%;
+    height: 33vh;
+    //height: 100%;
+  }
 }
 </style>
