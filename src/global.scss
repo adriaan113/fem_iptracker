@@ -7,6 +7,7 @@ $tertiary-text-color: grey;
 $btn-color: black;
 $btn-hover-color: grey; 
 $background-color: $primary-text-color;
+$line-color: $tertiary-text-color;
 
 //font size
 
@@ -43,5 +44,10 @@ $desktop-padding: 1rem;
 //border radius
 
 $border: 7px;
+
+
+//media queries
+
+$medium: 769px;
 
 

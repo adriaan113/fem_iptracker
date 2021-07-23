@@ -64,6 +64,8 @@ export default {
       input[type="text"]{
         width: 80vw;
         border-radius: $border 0 0 $border;
+        padding-left: 1rem;
+        color: $tertiary-text-color;
       }
       input[type="submit"]{
         width: 10%;
@@ -90,16 +92,37 @@ export default {
       width: 90vw;
       max-width: 69rem;
       z-index: 2;
+      @media  (min-width: $medium) {
+        flex-flow: row nowrap;
+        // padding: 1rem 0 2rem;
+      }
       &__item{
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
         width: 100%;
+        @media  (min-width: $medium) {
+          margin: .5rem 1rem;
+          align-items: flex-start;
+          border-left: 2px solid lighten($line-color, 40%);
+          padding-left: 1.5rem;
+          height: 4.5rem;
+          &:nth-child(1){
+            border-left: 0;
+          }
+        }
         p{
           color: $tertiary-text-color;
+          @media  (min-width: $medium) {
+            margin-top: 0;
+          }
         }
         h2{
           margin: 0 0 .5rem;
+          @media  (min-width: $medium) {
+            max-width: 6rem;
+            margin-bottom: 0;
+          }
         }
         &:nth-child(1){
           h2{
