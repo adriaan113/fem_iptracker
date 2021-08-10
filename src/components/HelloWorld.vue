@@ -9,19 +9,19 @@
     <ul class="info">
       <li class="info__item">
         <p>IP Address</p>
-        <h2>192.212.174.101</h2>
+        <h2>{{ip}}</h2>
       </li>
       <li class="info__item">
         <p>Location</p>
-        <h2>Brooklyn, NY 10001</h2>
+        <h2>{{location}}</h2>
       </li>
       <li class="info__item">
         <p>Timezone</p>
-        <h2>UTC -05:00</h2>
+        <h2>{{timezone}}</h2>
       </li>
       <li class="info__item">
         <p>ISP</p>
-        <h2>SpaceX Starlink</h2>
+        <h2>{{isp}}</h2>
       </li>
     </ul>
     <div class="map">
@@ -31,13 +31,50 @@
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
+  export default {
+    name: 'HelloWorld',
     props:{
-      // image: Object,
+        // image: Object,
+    },
+    data: function(){
+      return{
+        // ip: "8.8.8.8", //heb ik eigenlijk niet nodig geloof ik
+
+        apiKey: "at_spF8wiWyTRdL47h4nPRmiaWmx7wPR",
+        ip: '',
+        location: '',
+        timezone: '',
+        isp: '',
+      }
+    },
+    computed:{
+      url(){
+        return `https://geo.ipify.org/api/v1?apiKey=${this.apiKey}`;
+      }
+    },
+    methods:{
+      async getInfo(){
+        try{
+          let response = await fetch(this.url);
+          let result = await response.json();
+          console.log(result);
+          this.ip = result.ip;
+          this.location = result.location.city;
+          this.location += ', ' + result.location.country;
+          this.timezone = result.location.timezone;
+          this.isp = result.isp;
+
+        }catch(error){
+          console.log(`Dit gaat even niet goed want: ${error}`);
+        }
+      },
+    }, 
+    mounted:  function(){
+      this.getInfo();
+    }    
   }
- 
-}
+  
+  
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -133,9 +170,10 @@ export default {
     }
 
     .map{
-      background-image: url("../assets/Maps.png");
-        background-repeat: no-repeat;
-        background-size: cover;
+        // background-image: url("../assets/Maps.png");
+        // background-repeat: no-repeat;
+        // background-size: cover;
+        background-color: red;
         width: 100%;
         height: 67vh;
         position: absolute; 
