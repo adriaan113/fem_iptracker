@@ -1,9 +1,10 @@
+
 <template>
   <div class="wrapper">
     <form action="#">
       <label for="search"></label>
-      <input type="text" id="search" name="search">
-      <input type="submit" value=">">
+      <input v-model="searchBar" type="text" id="search" name="search">
+      <input @click="userSearch" type="submit" value=">">
     </form>
 
     <ul class="info">
@@ -25,16 +26,46 @@
       </li>
     </ul>
     <div class="map">
-      <!-- <img :src="image" alt=""> -->
+      <!-- <l-map id="mymap" ref="myMap"> </l-map> -->
+        <div  class="map-container">
+          <!-- <div class="info" style="height: 15%">
+            <span>Center: {{ center }}</span>
+            <span>Zoom: {{ zoom }}</span>
+            <span>Bounds: {{ bounds }}</span>
+          </div> -->
+          <l-map
+            :zoom="zoom"
+            :center="center"
+            @update:zoom="zoomUpdated"
+            @update:center="centerUpdated"
+            @update:bounds="boundsUpdated"
+            id="l-map"
+          >
+            <l-tile-layer :url="koeka"></l-tile-layer>
+          </l-map>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
+//TO DO: there needs to be a warning to enter a valid ip adress
+
+// import L from 'leaflet';
+// import 'leaflet/dist/leaflet.css';
+// import {LMap} from 'vue2-leaflet';
+
+import {LMap, LTileLayer} from 'vue2-leaflet';
+
   export default {
     name: 'HelloWorld',
     props:{
         // image: Object,
+    },
+    components: {
+    LMap,
+    LTileLayer,
+    // LMarker,
     },
     data: function(){
       return{
@@ -45,11 +76,22 @@
         location: '',
         timezone: '',
         isp: '',
+        searchBar: '',
+
+      koeka: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      zoom: 3,
+      center: [47.413220, -1.219482],
+      bounds: null
       }
     },
     computed:{
       url(){
-        return `https://geo.ipify.org/api/v1?apiKey=${this.apiKey}`;
+        if(this.ip === ''){
+          return `https://geo.ipify.org/api/v1?apiKey=${this.apiKey}`;
+        }else{
+          return `https://geo.ipify.org/api/v1?apiKey=${this.apiKey}&ipAddress=${this.ip}`;
+        }
+        
       }
     },
     methods:{
@@ -57,7 +99,6 @@
         try{
           let response = await fetch(this.url);
           let result = await response.json();
-          console.log(result);
           this.ip = result.ip;
           this.location = result.location.city;
           this.location += ', ' + result.location.country;
@@ -68,10 +109,41 @@
           console.log(`Dit gaat even niet goed want: ${error}`);
         }
       },
+      userSearch(e){
+        e.preventDefault();
+        if(this.searchBar!= ''){
+            this.ip = this.searchBar;
+            this.getInfo();
+        } 
+      },
+      zoomUpdated (zoom) {
+        this.zoom = zoom;
+      },
+      centerUpdated (center) {
+        this.center = center;
+      },
+      boundsUpdated (bounds) {
+        this.bounds = bounds;
+      }
     }, 
-    mounted:  function(){
+    created:  function(){
       this.getInfo();
-    }    
+      
+    },
+    // mounted() {
+    //   this.$nextTick(() => {
+    //     this.$refs.myMap.mapObject.setView([51.505, -0.09], 13);
+
+    //         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    //         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    //         maxZoom: 18,
+    //         id: 'mapbox/streets-v11',
+    //         tileSize: 512,
+    //         zoomOffset: -1,
+    //         accessToken: 'pk.eyJ1IjoiYWRyaWFhbjExMyIsImEiOiJja3NhZTJmbjkxZTJvMm9vY2loczVoZjd6In0.PlR3Gc0RxP6q2xILDMLq7A'
+    //     });
+    //   });
+    // },    
   }
   
   
@@ -128,7 +200,7 @@
       margin:  -5rem 0 0;
       width: 90vw;
       max-width: 69rem;
-      z-index: 2;
+      z-index: 999;
       @media  (min-width: $medium) {
         flex-flow: row nowrap;
         // padding: 1rem 0 2rem;
@@ -170,13 +242,17 @@
     }
 
     .map{
-        // background-image: url("../assets/Maps.png");
-        // background-repeat: no-repeat;
-        // background-size: cover;
-        background-color: red;
+      width: 100%;
+      height: 67vh;
+      position: absolute; 
+      .map-container{
+        height: 100%;
+      }
+      #l-map{
+        height: 100%; 
         width: 100%;
-        height: 67vh;
-        position: absolute; 
+        // z-index: -1 !important;
+      }
   }
 
 }
