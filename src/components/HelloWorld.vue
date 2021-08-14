@@ -36,6 +36,7 @@
             id="l-map"
           >
             <l-tile-layer :url="koeka"></l-tile-layer>
+            <l-marker :latLng="marker"></l-marker>
           </l-map>
         </div>
     </div>
@@ -48,8 +49,15 @@
       //style the map
 
 
-import { latLng } from "leaflet";
-import {LMap, LTileLayer} from 'vue2-leaflet';
+import { latLng,Icon } from "leaflet";
+import {LMap, LTileLayer,LMarker} from 'vue2-leaflet';
+
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
   export default {
     name: 'HelloWorld',
@@ -58,7 +66,7 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
     components: {
     LMap,
     LTileLayer,
-    // LMarker,
+    LMarker,
     },
     data: function(){
       return{
@@ -74,8 +82,11 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
 
         koeka: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         zoom: 15,
-        center: latLng(47.41322, -1.219482),
-        bounds: null
+        center: latLng(52.3075,4.97222),//hier nog even naar kijken. moet geen hardcode zijn
+        bounds: null,
+
+        marker: latLng(52.3075,4.97222),//hier ook
+        
       }
     },
     computed:{
@@ -102,6 +113,8 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
           this.lng = result.location.lng;
         
           this.center = latLng(this.lat, this.lng);
+          this.marker = latLng(this.lat, this.lng);
+          //this.getMarker();
           console.log(this.center);
 
 
@@ -125,9 +138,12 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
       boundsUpdated (bounds) {
         this.bounds = bounds;
       },
-      test(){
-          this.center = latLng(this.lat, this.lng);  
-      },
+      // test(){
+      //     this.center = latLng(this.lat, this.lng);  
+      // },
+      // getMarker(){
+      //   return latLng(this.lat,this.lng);
+      // }
     }, 
     created(){
       this.getInfo();
