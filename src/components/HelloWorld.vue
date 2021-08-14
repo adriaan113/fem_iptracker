@@ -44,6 +44,9 @@
 
 <script>
 //TO DO: there needs to be a warning to enter a valid ip adress
+      //get a marker on the map
+      //style the map
+
 
 import { latLng } from "leaflet";
 import {LMap, LTileLayer} from 'vue2-leaflet';
@@ -59,8 +62,6 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
     },
     data: function(){
       return{
-        // ip: "8.8.8.8", //heb ik eigenlijk niet nodig geloof ik
-
         apiKey: "at_spF8wiWyTRdL47h4nPRmiaWmx7wPR",
         ip: '',
         location: '',
@@ -85,9 +86,6 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
           return `https://geo.ipify.org/api/v1?apiKey=${this.apiKey}&ipAddress=${this.ip}`;
         }
       },
-      // test(){
-      //   return [this.lat,this.lng]   
-      // }
     },
     methods:{
       async getInfo(){
@@ -102,11 +100,10 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
 
           this.lat = result.location.lat;
           this.lng = result.location.lng;
-          
-          //this.center.push(this.lat, this.lng);
+        
           this.center = latLng(this.lat, this.lng);
           console.log(this.center);
-          //this.test();
+
 
         }catch(error){
           console.log(`Dit gaat even niet goed want: ${error}`);
@@ -129,26 +126,12 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
         this.bounds = bounds;
       },
       test(){
-        // this.$nextTick(function (){
           this.center = latLng(this.lat, this.lng);  
-        // });
       },
     }, 
     created(){
       this.getInfo();
-      // this.test();
-      // this.center.push(this.lat, this.lng);
     },
-    mounted(){
-
-      //this.test();
-
-      // console.log(this.center);
-
-      // this.$nextTick(() => {
-      //   this.$refs.myMap.mapObject.locate();
-      // });
-    }
   }
   
   
@@ -208,7 +191,6 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
       z-index: 999;
       @media  (min-width: $medium) {
         flex-flow: row nowrap;
-        // padding: 1rem 0 2rem;
       }
       &__item{
         display: flex;
@@ -256,7 +238,6 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
       #l-map{
         height: 100%; 
         width: 100%;
-        // z-index: -1 !important;
       }
   }
 
