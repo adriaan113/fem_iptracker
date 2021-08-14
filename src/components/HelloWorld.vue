@@ -26,13 +26,7 @@
       </li>
     </ul>
     <div class="map">
-      <!-- <l-map id="mymap" ref="myMap"> </l-map> -->
         <div  class="map-container">
-          <!-- <div class="info" style="height: 15%">
-            <span>Center: {{ center }}</span>
-            <span>Zoom: {{ zoom }}</span>
-            <span>Bounds: {{ bounds }}</span>
-          </div> -->
           <l-map
             :zoom="zoom"
             :center="center"
@@ -51,16 +45,12 @@
 <script>
 //TO DO: there needs to be a warning to enter a valid ip adress
 
-// import L from 'leaflet';
-// import 'leaflet/dist/leaflet.css';
-// import {LMap} from 'vue2-leaflet';
-
+import { latLng } from "leaflet";
 import {LMap, LTileLayer} from 'vue2-leaflet';
 
   export default {
     name: 'HelloWorld',
     props:{
-        // image: Object,
     },
     components: {
     LMap,
@@ -78,10 +68,13 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
         isp: '',
         searchBar: '',
 
-      koeka: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      zoom: 3,
-      center: [47.413220, -1.219482],
-      bounds: null
+        lat: '',
+        lng: '',
+
+        koeka: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        zoom: 15,
+        center: latLng(47.41322, -1.219482),
+        bounds: null
       }
     },
     computed:{
@@ -91,8 +84,10 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
         }else{
           return `https://geo.ipify.org/api/v1?apiKey=${this.apiKey}&ipAddress=${this.ip}`;
         }
-        
-      }
+      },
+      // test(){
+      //   return [this.lat,this.lng]   
+      // }
     },
     methods:{
       async getInfo(){
@@ -104,6 +99,14 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
           this.location += ', ' + result.location.country;
           this.timezone = result.location.timezone;
           this.isp = result.isp;
+
+          this.lat = result.location.lat;
+          this.lng = result.location.lng;
+          
+          //this.center.push(this.lat, this.lng);
+          this.center = latLng(this.lat, this.lng);
+          console.log(this.center);
+          //this.test();
 
         }catch(error){
           console.log(`Dit gaat even niet goed want: ${error}`);
@@ -124,26 +127,28 @@ import {LMap, LTileLayer} from 'vue2-leaflet';
       },
       boundsUpdated (bounds) {
         this.bounds = bounds;
-      }
+      },
+      test(){
+        // this.$nextTick(function (){
+          this.center = latLng(this.lat, this.lng);  
+        // });
+      },
     }, 
-    created:  function(){
+    created(){
       this.getInfo();
-      
+      // this.test();
+      // this.center.push(this.lat, this.lng);
     },
-    // mounted() {
-    //   this.$nextTick(() => {
-    //     this.$refs.myMap.mapObject.setView([51.505, -0.09], 13);
+    mounted(){
 
-    //         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    //         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    //         maxZoom: 18,
-    //         id: 'mapbox/streets-v11',
-    //         tileSize: 512,
-    //         zoomOffset: -1,
-    //         accessToken: 'pk.eyJ1IjoiYWRyaWFhbjExMyIsImEiOiJja3NhZTJmbjkxZTJvMm9vY2loczVoZjd6In0.PlR3Gc0RxP6q2xILDMLq7A'
-    //     });
-    //   });
-    // },    
+      //this.test();
+
+      // console.log(this.center);
+
+      // this.$nextTick(() => {
+      //   this.$refs.myMap.mapObject.locate();
+      // });
+    }
   }
   
   
