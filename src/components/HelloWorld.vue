@@ -1,3 +1,8 @@
+//TO DO: 
+      //there needs to be a warning to enter a valid ip adress
+      //get a marker on the map
+      //style the map
+
 
 <template>
   <div class="wrapper">
@@ -36,7 +41,13 @@
             id="l-map"
           >
             <l-tile-layer :url="koeka"></l-tile-layer>
-            <l-marker :latLng="marker"></l-marker>
+            <l-marker :latLng="marker">
+              <l-icon 
+                :icon-size="dynamicSize"
+                :icon-anchor="dynamicAnchor"
+                :icon-url="iconUrl"
+              />
+            </l-marker>
           </l-map>
         </div>
     </div>
@@ -44,14 +55,11 @@
 </template>
 
 <script>
-//TO DO: there needs to be a warning to enter a valid ip adress
-      //get a marker on the map
-      //style the map
-
 
 import { latLng,Icon } from "leaflet";
-import {LMap, LTileLayer,LMarker} from 'vue2-leaflet';
+import {LMap, LTileLayer,LMarker, LIcon} from 'vue2-leaflet';
 
+//webpack solution for displaying the icon
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -67,6 +75,7 @@ Icon.Default.mergeOptions({
     LMap,
     LTileLayer,
     LMarker,
+    LIcon
     },
     data: function(){
       return{
@@ -86,6 +95,16 @@ Icon.Default.mergeOptions({
         bounds: null,
 
         marker: latLng(52.3075,4.97222),//hier ook
+
+        iconUrl: require("../assets/icon-location.svg"),
+        iconSize: [32, 37],
+        iconAnchor: [16, 37]
+
+        // icon:{
+        //   iconUrl:require("../assets/icon-location.svg"),
+        //   iconSize:[32,37],
+        //   iconAnchor: [16,37]
+        // },
         
       }
     },
@@ -97,6 +116,12 @@ Icon.Default.mergeOptions({
           return `https://geo.ipify.org/api/v1?apiKey=${this.apiKey}&ipAddress=${this.ip}`;
         }
       },
+      dynamicSize() {
+      return [this.iconSize, this.iconSize * 1.15];
+      },
+      dynamicAnchor() {
+        return [this.iconSize / 2, this.iconSize * 1.15];
+      }
     },
     methods:{
       async getInfo(){
