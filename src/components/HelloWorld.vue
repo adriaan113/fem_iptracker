@@ -1,6 +1,4 @@
 //TO DO: 
-      //there needs to be a warning to enter a valid ip adress
-      //get a marker on the map
       //style the map
 
 
@@ -8,7 +6,7 @@
   <div class="wrapper">
     <form action="#">
       <label for="search"></label>
-      <input v-model="searchBar" type="text" id="search" name="search">
+      <input v-model="searchBar" type="text" id="search" name="search" :placeholder="placeHolderText" :class="{warning: warning}">
       <input @click="userSearch" type="submit" value=">">
     </form>
 
@@ -98,14 +96,11 @@ Icon.Default.mergeOptions({
 
         iconUrl: require("../assets/icon-location.svg"),
         iconSize: [32, 37],
-        iconAnchor: [16, 37]
-
-        // icon:{
-        //   iconUrl:require("../assets/icon-location.svg"),
-        //   iconSize:[32,37],
-        //   iconAnchor: [16,37]
-        // },
+        iconAnchor: [16, 37],
         
+        placeHolderText: 'IP adress here',
+        warningText: `You've entered a invalid IP adress`,
+        warning: false,
       }
     },
     computed:{
@@ -139,19 +134,21 @@ Icon.Default.mergeOptions({
         
           this.center = latLng(this.lat, this.lng);
           this.marker = latLng(this.lat, this.lng);
-          //this.getMarker();
-          console.log(this.center);
-
-
         }catch(error){
           console.log(`Dit gaat even niet goed want: ${error}`);
         }
       },
       userSearch(e){
         e.preventDefault();
+        this.warning = false;
         if(this.searchBar!= ''){
+          if(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(this.searchBar)){
             this.ip = this.searchBar;
             this.getInfo();
+          }else{
+            this.wrongIpAdress();
+          }
+            
         } 
       },
       zoomUpdated (zoom) {
@@ -163,12 +160,19 @@ Icon.Default.mergeOptions({
       boundsUpdated (bounds) {
         this.bounds = bounds;
       },
-      // test(){
-      //     this.center = latLng(this.lat, this.lng);  
-      // },
-      // getMarker(){
-      //   return latLng(this.lat,this.lng);
-      // }
+      wrongIpAdress(){
+        this.searchBar = '';
+        this.warning = true;
+        this.placeHolderText = this.warningText;
+        this.resetForm();
+      },
+      resetForm(){
+        setTimeout(()=>{
+          this.placeHolderText = 'IP adress here';
+          this.warning = false;
+        },1500);
+          
+      }
     }, 
     created(){
       this.getInfo();
@@ -198,12 +202,17 @@ Icon.Default.mergeOptions({
         margin: 0;
         padding: 0;
         border-width: 0;
+        border: 2px solid transparent;
       }
       input[type="text"]{
         width: 80vw;
         border-radius: $border 0 0 $border;
         padding-left: 1rem;
         color: $tertiary-text-color;
+        outline: none;
+        :focus{
+          outline: none;
+        }
       }
       input[type="submit"]{
         width: 10%;
@@ -212,6 +221,7 @@ Icon.Default.mergeOptions({
         color: $primary-text-color;
         border-radius:  0 $border $border 0;
         cursor: pointer;
+        height: calc(2.5rem + 5px);
         &:hover{
           background-color: $btn-hover-color;
         }
@@ -282,7 +292,8 @@ Icon.Default.mergeOptions({
       }
   }
 
+  .warning{
+    border: 2px solid $warning;
+  }
 }
-
-
 </style>
