@@ -3,24 +3,20 @@
     <header>
       <h1 class="title">IP Address Tracker</h1>
     </header>
-    
-    <!-- <img class="background-img" :src="backgroundImg" alt=""> -->
-    <HelloWorld/>
+    <InnerApp/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import InnerApp from './components/InnerApp.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    InnerApp
   },
   data: function(){
     return{
-      // backgroundImg: require('/src/assets/pattern-bg.png'),
-      // map: require('/src/assets/Maps.png')
     }
   },
 }

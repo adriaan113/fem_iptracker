@@ -1,6 +1,3 @@
-//TO DO: 
-      //style the map
-
 
 <template>
   <div class="wrapper">
@@ -66,7 +63,7 @@ Icon.Default.mergeOptions({
 });
 
   export default {
-    name: 'HelloWorld',
+    name: 'InnerApp',
     props:{
     },
     components: {
@@ -172,7 +169,7 @@ Icon.Default.mergeOptions({
           this.warning = false;
         },1500);
           
-      }
+      },
     }, 
     created(){
       this.getInfo();
@@ -215,7 +212,7 @@ Icon.Default.mergeOptions({
         }
       }
       input[type="submit"]{
-        width: 10%;
+        width: 20%;
         max-width: 3rem;
         background-color: $btn-color;
         color: $primary-text-color;
@@ -295,5 +292,6 @@ Icon.Default.mergeOptions({
   .warning{
     border: 2px solid $warning;
   }
+
 }
 </style>
